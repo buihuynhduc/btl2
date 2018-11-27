@@ -1,5 +1,4 @@
 package graphic;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,15 +8,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.BitSet;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import actor.Bomber;
 import actor.Manager;
 
 
-public class Play extends JPanel implements Runnable,ActionListener{
+public class Play extends JPanel implements Runnable,ActionListener
+{
 	public static boolean IS_RUNNING=true;
 	private final Game mGame;
 	private BitSet traceKey = new BitSet();
@@ -50,7 +48,8 @@ public class Play extends JPanel implements Runnable,ActionListener{
 	}
 	
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) 
+	{
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setStroke(new java.awt.BasicStroke(2));
@@ -88,7 +87,8 @@ public class Play extends JPanel implements Runnable,ActionListener{
 	};
 	
 	@Override
-	public void run() {
+	public void run()
+	{
 		while(IS_RUNNING){
 			try {
 				Thread.sleep(1);
@@ -176,7 +176,8 @@ public class Play extends JPanel implements Runnable,ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e)
+	{
 		if(e.getSource()==btn_Menu){
 			mMagager.setRound(1);
 			mMagager.innitManager();
