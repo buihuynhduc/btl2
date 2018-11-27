@@ -7,15 +7,18 @@ import javax.swing.JPanel;
 
 import sound.GameSound;
 
-public class Game extends JPanel{
+public class Game extends JPanel
+{
 	private static final String Jmenu = "tag_menu";
 	private static final String Jplaygame = "tag_playgame";
+	private final Play mPlayGame;
 	private final CardLayout mLayout;
 	private final Graphic graphic;
 	private final Processor mMenu;
-	private final Play mPlayGame;
+
 	
-        public Graphic getGraphic() {
+        public Graphic getGraphic()
+	{
 		return graphic;
 	}
 	public Game(Graphic mGraphic){
