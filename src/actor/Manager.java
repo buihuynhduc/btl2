@@ -1,57 +1,63 @@
-package actor;
-
+package actorgame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
-
-
+import javax.swing.JOptionPane;
 import sound.GameSound;
 
-public class Manager {
-	private Random random = new Random();
-	private Bomber mBomber;
-	private ArrayList<Box> arrBox;
+public class Manager
+{
+    private ArrayList<Box> arrBox;
 	private ArrayList<Box> arrShawDow;
 	private ArrayList<Bomb> arrBomb;
+	private Random random = new Random();
+	private Bomber mBomber;
+	private int round=1;
+	private int nextRound=0;
+	private int status =0;
 	private ArrayList<BombBang> arrBombBang;
 	private ArrayList<Monster> arrMonster;
 	private ArrayList<Item> arrItem;
+	private ArrayList<HightScore> arrHightScore;
 	private String Background;
-	private int round=1;
-	private int nextRound = 0;
-	private int status = 0;
-        private int testPortal =0;
+        private int Portal =0;
 //boolean door=false;
-	public Manager() {
-		innitManager();
+	public Manager() 
+        {
+	innitManager();
 	}
 
 	public void innitManager() {
-		switch (round) {
+		switch (round)
+                {
 		case 1:
-			mBomber = new Bomber(0, 540, Actor.BOMBER, Actor.DOWN, 5, 1, 1);
-			innit("src/Map1/BOX.txt", "src/Map1/SHADOW.txt",
-					"src/Map1/MONSTER.txt", "src/Map1/ITEM.txt");
-			nextRound = 0;
-			status = 0;
-                       
-			break;
+			mBomber = new Bomber(0, 540, Actor.BOMBER, Actor.DOWN,5,1,1);
+			innit("src/Map1/BOX.txt", "src/Map1/SHADOW.txt","src/Map1/MONSTER.txt", "src/Map1/ITEM.txt");
+			nextRound=0;
+			status=0; 
+                        break;
 		case 2:
 			mBomber.setNew(315, 270);
-			innit("src/Map2/BOX.txt", "src/Map2/SHADOW.txt",
-					"src/Map2/MONSTER.txt", "src/Map2/ITEM.txt");
-			nextRound = 0;
-			status = 0;
-                       
+			innit("src/Map2/BOX.txt", "src/Map2/SHADOW.txt","src/Map2/MONSTER.txt", "src/Map2/ITEM.txt");
+			nextRound =0;
+			status =0;
+                        break;
+		case 3:
+			mBomber.setNew(315, 495);
+			innit("src/Map3/BOX.txt", "src/Map3/SHADOW.txt","src/Map3/MONSTER.txt", "src/Map3/ITEM.txt");
+			nextRound =0;
+			status =0;
 			break;
 
 		default:
@@ -60,59 +66,67 @@ public class Manager {
 
 	}
 
-	public void innit(String pathBox, String pathShadow, String pathMonster,
-			String pathItem) {
+	public void innit(String pathBox, String pathShadow, String pathMonster,String pathItem) 
+        {       arrMonster = new ArrayList<Monster>();
+		arrItem = new ArrayList<Item>();
+		arrHightScore = new ArrayList<HightScore>();
 		arrBox = new ArrayList<Box>();
 		arrShawDow = new ArrayList<Box>();
 		arrBomb = new ArrayList<Bomb>();
 		arrBombBang = new ArrayList<BombBang>();
-		arrMonster = new ArrayList<Monster>();
-		arrItem = new ArrayList<Item>();
-
-		innitArrBox(pathBox, pathShadow);
+                innitArrBox(pathBox, pathShadow);
 		initarrMonster(pathMonster);
 		innitArrItem(pathItem);
+		innitArrHightScore("src/hightscore/HightScore.txt");
 	}
 
 	public void innitArrItem(String path) {
 		try {
-			FileReader file = new FileReader(path);
-			BufferedReader input = new BufferedReader(file);
+			FileReader fl = new FileReader(path);
+			BufferedReader ip = new BufferedReader(fl);
 			String line;
-			while ((line = input.readLine()) != null) {
-				String str[] = line.split(":");
-				int x = Integer.parseInt(str[0]);
-				int y = Integer.parseInt(str[1]);
-				int type = Integer.parseInt(str[2]);
-				String images = str[3];
-				Item item = new Item(x, y, type, images);
+			while ((line=ip.readLine())!= null) {
+				String st[]=line.split(":");
+                                int y =Integer.parseInt(st[1]);
+				int type =Integer.parseInt(st[2]);
+				int x =Integer.parseInt(st[0]);
+				String images =st[3];
+				Item item =new Item(x,y,type,images);
 				arrItem.add(item);
 			}
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e)
+                {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e)
+                {
 			e.printStackTrace();
 		}
 	}
 
-	public void innitArrBox(String pathBox, String pathShadow) {
-		try {
-			FileReader file = new FileReader(pathBox);
-			BufferedReader input = new BufferedReader(file);
-			Background = input.readLine();
+	public void innitArrBox(String pathBox, String pathShadow) 
+        {
+		try 
+                {
+			FileReader fl = new FileReader(pathBox);
+			BufferedReader ip = new BufferedReader(fl);
+			Background = ip.readLine();
 			String line;
-			while ((line = input.readLine()) != null) {
+			while ((line = ip.readLine()) != null) {
 				String str[] = line.split(":");
-				int x = Integer.parseInt(str[0]);
-				int y = Integer.parseInt(str[1]);
+				
 				int type = Integer.parseInt(str[2]);
 				String images = str[3];
-				Box box = new Box(x, y, type, images);
+                                int x = Integer.parseInt(str[0]);
+				int y = Integer.parseInt(str[1]);
+				Box box = new Box(x,y,type,images);
 				arrBox.add(box);
 			}
-		} catch (FileNotFoundException e) {
+		} 
+                catch (FileNotFoundException e) 
+                {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e) 
+                {
 			e.printStackTrace();
 		}
 
@@ -181,6 +195,24 @@ public class Manager {
 		}
 	}
 	
+	public void innitArrHightScore(String path){
+		try {
+			FileReader file = new FileReader(path);
+			BufferedReader input = new BufferedReader(file);
+			String line;
+			while ((line = input.readLine()) != null) {
+				String str[] = line.split(":");
+				String name = str[0];
+				int score = Integer.parseInt(str[1]);
+				HightScore hightScore = new HightScore(name, score);
+				arrHightScore.add(hightScore);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void drawDialog(Graphics2D g2d, int type) {
 		g2d.setFont(new Font("Arial", Font.BOLD, 60));
@@ -298,7 +330,7 @@ public class Manager {
                                 }
                                  if(arrItem.get(i).getType()==Item.Item_door)
                                 {
-                                   testPortal=1;
+                                   Portal=1;
                                    arrItem.remove(i);
                                     break;
                                 }
@@ -312,53 +344,59 @@ public class Manager {
 			nextRound++;
 			GameSound.getIstance().getAudio(GameSound.PLAYGAME).stop();
 			GameSound.getIstance().getAudio(GameSound.LOSE).play();
+			saveScore();
 		}
                 for (int i = 0; i < arrItem.size(); i++) {
 			if (arrItem.get(i).isImpactItemVsBomber(mBomber)) {
                             if (arrItem.get(i).getType() == Item.Item_door) {
-					testPortal=1;
+					Portal=1;
 					break;
 				}
                         }
                 }
-		if (arrMonster.size() == 0 && nextRound == 0 && testPortal==1) {
+		if (arrMonster.size() == 0 && nextRound == 0 && Portal==1) {
 			if (round == 2) {
 				status = 3;
 				nextRound++;
 				GameSound.getIstance().getAudio(GameSound.PLAYGAME).stop();
 				GameSound.getIstance().getAudio(GameSound.WIN).play();
+				saveScore();
 				round = 1;
 				return;
 			}
 			round = round + 1;
 			nextRound++;
 			status = 2;
-                        testPortal=0;
+                        Portal=0;
                                 
 		}
 	}
 
-	public void checkDead() {
-		for (int i = 0; i < arrBombBang.size(); i++) {
-			if (arrBombBang.get(i).isImpactBombBangVsActor(mBomber)  && mBomber.getStatus()==Bomber.ALIVE ) {
-				Image icon = new ImageIcon(getClass().getResource(
-						"/Images/bomber_dead.png")).getImage();
+	public void checkDead()
+        {
+		for (int i =0; i<arrBombBang.size();i++) {
+			if (arrBombBang.get(i).isImpactBombBangVsActor(mBomber)&&mBomber.getStatus()==Bomber.ALIVE ) 
+                        {
+				Image icon = new ImageIcon(getClass().getResource("/Images/bomber_dead.png")).getImage();
 				mBomber.setImg(icon);
-				if (mBomber.getStatus() == Bomber.DEAD) {
-					return;
+				if (mBomber.getStatus()==Bomber.DEAD)
+                                {
+				return;
 				}
 				mBomber.setHeart(mBomber.getHeart() - 1);
 				mBomber.setStatus(Bomber.DEAD);
 				GameSound.instance.getAudio(GameSound.BOMBER_DIE).play();
 			}
 		}
-		for (int i = 0; i < arrMonster.size(); i++) {
-			if (mBomber.isImpactBomberVsActor(arrMonster.get(i))) {
-				Image icon = new ImageIcon(getClass().getResource(
-						"/Images/ghost.png")).getImage();
+		for (int i=0; i <arrMonster.size();i++)
+                {
+			if (mBomber.isImpactBomberVsActor(arrMonster.get(i)))
+                        {
+				Image icon = new ImageIcon(getClass().getResource("/Images/ghost.png")).getImage();
 				mBomber.setImg(icon);
-				if (mBomber.getStatus() == Bomber.DEAD) {
-					return;
+				if (mBomber.getStatus() == Bomber.DEAD)
+                                {
+                                return;
 				}
 				mBomber.setHeart(mBomber.getHeart()-1);
 				mBomber.setStatus(Bomber.DEAD);
@@ -368,7 +406,8 @@ public class Manager {
 	}
 
 
-	public void deadLineAllBomb() {
+	public void deadLineAllBomb() 
+        {
 		for (int i = 0; i < arrBomb.size(); i++) {
 			arrBomb.get(i).deadlineBomb();
 			if (arrBomb.get(i).getTimeline() == 250) {
@@ -440,16 +479,8 @@ public class Manager {
 			}
 		}
 	}
-
-	public void setRunBomer() {
-		if (arrBomb.size() > 0) {
-			if (arrBomb.get(arrBomb.size() - 1).setRun(mBomber) == false) {
-				mBomber.setRunBomb(Bomber.DISALLOW_RUN);
-			}
-		}
-	}
-
-	public void setNewBomb() {
+        public void setNewBomb()
+        {
 		switch (round) {
 		case 1:
 			mBomber.setNew(0, 540);
@@ -466,14 +497,20 @@ public class Manager {
 		}
 	}
 
-	public void changeOrientAll() {
-		for (int i = 0; i < arrMonster.size(); i++) {
-			int orient = random.nextInt(4) + 1;
-			arrMonster.get(i).changeOrient(orient);
+	public void setRunBomer() {
+		if (arrBomb.size() > 0) {
+			if (arrBomb.get(arrBomb.size() - 1).setRun(mBomber) == false) {
+				mBomber.setRunBomb(Bomber.DISALLOW_RUN);
+			}
 		}
 	}
 
-	public void moveAllMonster(int count) {
+	
+
+	
+
+	public void moveAllMonster(int count)
+        {
 		for (int i = 0; i < arrMonster.size(); i++) {
 			if (arrMonster.get(i).move(count, arrBomb, arrBox) == false) {
 				int orient = random.nextInt(4) + 1;
@@ -481,26 +518,77 @@ public class Manager {
 			}
 		}
 	}
+        public void changeOrientAll() 
+        {
+		for (int i = 0; i < arrMonster.size(); i++) 
+                {
+			int orient = random.nextInt(4) + 1;
+			arrMonster.get(i).changeOrient(orient);
+		}
+	}
 	
-	
+	public void saveScore(){
+		System.out.println();
+		if(mBomber.getScore()>arrHightScore.get(arrHightScore.size()-1).getScore()){
+			String name = JOptionPane.showInputDialog("Please input Your Name");
+			HightScore newScore = new HightScore(name, mBomber.getScore());
+			arrHightScore.add(newScore);
+		}
+		Collections.sort(arrHightScore, new Comparator<HightScore>() {
 
-	public ArrayList<Box> getArrBox() {
-		return arrBox;
+			@Override
+			public int compare(HightScore score1, HightScore score2) {
+				if(score1.getScore()<score2.getScore()){
+					return 1;
+				}else{
+					if(score1.getScore()==score2.getScore()){
+						return 0;
+					}else{
+						return -1;
+					}
+				}
+			}
+		});
+		
+		if(arrHightScore.size()>10){
+			arrHightScore.remove(arrHightScore.size()-1);
+		}
+		
+		try {
+			FileOutputStream fileOutput = new FileOutputStream("src/hightscore/HightScore.txt");
+			for(int i=0;i<arrHightScore.size();i++){
+				String content = arrHightScore.get(i).getName()+":"+arrHightScore.get(i).getScore()+"\n";
+				fileOutput.write(content.getBytes());
+			}
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
 	}
-
-	public ArrayList<Bomb> getArrBomb() {
-		return arrBomb;
-	}
-
-	public Bomber getmBomber() {
-		return mBomber;
-	}
-	public int getStatus() {
+        public int getStatus()
+        {
 		return status;
 	}
 
-	public void setRound(int round) {
-		this.round = 1;
+	
+
+	public ArrayList<Bomb> getArrBomb() 
+        {
+		return arrBomb;
+	}
+
+	public Bomber getmBomber()
+        {
+		return mBomber;
+	}
+	
+
+	public void setRound(int round)
+        {
+		this.round = 2;
+	}
+        public ArrayList<Box> getArrBox()
+        {
+		return arrBox;
 	}
 	
 }
