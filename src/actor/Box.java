@@ -1,81 +1,96 @@
-package actor;
-
+package actorgame;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-
 import javax.swing.ImageIcon;
 
-public class Box {
+public class Box 
+{
+    public static int DISALLROW_BANG = 1;
 	public static int ALLROW_BANG = 0;
-	public static int DISALLROW_BANG = 1;
-	private int x,y,width,height,type;
-	private Image img;
-	public Box(int x, int y, int type,String images) {
+        private int width,height;
+        private int type;
+	private int x,y;
+        private Image img;
+	public Box(int a,int b,int type,String image)
+        {
 		super();
-		this.x = x;
-		this.y = y;
-		this.type = type;
-		this.img = new ImageIcon(getClass().getResource(images)).getImage();
+                this.type = type;
+		this.img = new ImageIcon(getClass().getResource(image)).getImage();
+                this.x = a;
+		this.y = b;
 		this.width = img.getWidth(null);
 		this.height = img.getHeight(null);
 	}
 	
-	public void drawBox(Graphics2D g2d){
-		g2d.drawImage(img, x, y, null);
+	public void drawBox(Graphics2D gd)
+        {
+		gd.drawImage(img,x,y,null);
 		
 	}
 	
-	public int getType() {
+	public int getType()
+        {
 		return type;
 	}
 	
 	
-	public int isImpactBoxvsActor(Actor actor){
-		if(actor.getType()==Actor.BOSS){
+	public int isImpactBoxvsActor(Actor ac)
+        {       Rectangle r1 = new Rectangle(x, y, width, height);
+		Rectangle r2 = new Rectangle(ac.getX(), ac.getY(), ac.getWidth(), ac.getHeight());
+		Rectangle r3 = new Rectangle();
+		if(ac.getType()==Actor.BOSS)
+                {
 			return 0;
 		}
-		Rectangle rec1 = new Rectangle(x, y, width, height);
-		Rectangle rec2 = new Rectangle(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
-		Rectangle rec3 = new Rectangle();
-		if(rec1.intersects(rec2)){
-			rec1.intersect(rec1, rec2, rec3);
-			if(rec3.getHeight()==1 && (actor.getOrient()==Actor.UP || actor.getOrient()==Actor.DOWN))
-                        {
-				if(actor.getX()==rec3.getX()){
-					return (int)rec3.getWidth();
-				}else
+		
+		if(r1.intersects(r2))
+                {
+			r1.intersect(r1, r2, r3);
+			if(r3.getHeight()!=1 && (ac.getOrient()==Actor.UP || ac.getOrient()==Actor.DOWN))
+                        {if(ac.getY()==r3.getY())
                                 {
-					return (int)-rec3.getWidth();
+				return (int)r3.getHeight();
 				}
+                                else
+                                {
+				return (int)-r3.getHeight();
+				}
+				
 			}
-                        else{
-				if(actor.getY()==rec3.getY())
+                        else
+                        {
+				
+                            if(ac.getX()==r3.getX())
                                 {
-					return (int)rec3.getHeight();
-				}else
+				return (int)r3.getWidth();
+				}
+                                else
                                 {
-					return (int)-rec3.getHeight();
+				return (int)-r3.getWidth();
 				}
 			}
 		}
 		return 0;
 	}
-
-	public int getX() {
-		return x;
+        public int getWidth()
+        {
+	return width;
+	}
+        public int getHeight()
+        {
+	return height;
+	}
+        public int getY()
+        {
+	return y;
+	}
+        public int getX()
+        {
+	return x;
 	}
 
-	public int getY() {
-		return y;
-	}
 
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
+	
 
 }
