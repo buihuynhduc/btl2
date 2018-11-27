@@ -1,4 +1,6 @@
-package actor;
+package actorgame;
+
+
 
 import java.awt.Color;
 import java.awt.Font;
