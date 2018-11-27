@@ -1,3 +1,0 @@
-0:360:2:3:10:1:/Images/monster_down.png
-495:180:2:3:10:1:/Images/monster_down.png
-630:540:2:3:10:1:/Images/monster_up.png
